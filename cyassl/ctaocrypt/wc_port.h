@@ -64,6 +64,8 @@
     #include "cmsis_os.h"
 #elif defined(CYASSL_IAR_ARM)
     /* do nothing */
+#elif defined(NOS)
+    /* do nothing */
 #else
     #ifndef SINGLE_THREADED
         #define CYASSL_PTHREADS
