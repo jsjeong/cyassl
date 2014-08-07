@@ -521,7 +521,7 @@ int CyaSSL_CTX_UseCavium(CYASSL_CTX* ctx, int devId)
 
 #ifdef HAVE_SNI
 
-int CyaSSL_UseSNI(CYASSL* ssl, byte type, const void* data, word16 size)
+int CyaSSL_UseSNI(CYASSL* ssl, unsigned char type, const void* data, unsigned short size)
 {
 	if (ssl == NULL)
 		return BAD_FUNC_ARG;
@@ -529,7 +529,7 @@ int CyaSSL_UseSNI(CYASSL* ssl, byte type, const void* data, word16 size)
     return TLSX_UseSNI(&ssl->extensions, type, data, size);
 }
 
-int CyaSSL_CTX_UseSNI(CYASSL_CTX* ctx, byte type, const void* data, word16 size)
+int CyaSSL_CTX_UseSNI(CYASSL_CTX* ctx, unsigned char type, const void* data, unsigned short size)
 {
     if (ctx == NULL)
         return BAD_FUNC_ARG;
@@ -556,7 +556,7 @@ byte CyaSSL_SNI_Status(CYASSL* ssl, byte type)
     return TLSX_SNI_Status(ssl ? ssl->extensions : NULL, type);
 }
 
-word16 CyaSSL_SNI_GetRequest(CYASSL* ssl, byte type, void** data)
+unsigned short CyaSSL_SNI_GetRequest(CYASSL *ssl, unsigned char type, void** data)
 {
     if (data)
         *data = NULL;
@@ -567,8 +567,9 @@ word16 CyaSSL_SNI_GetRequest(CYASSL* ssl, byte type, void** data)
     return 0;
 }
 
-int CyaSSL_SNI_GetFromBuffer(const byte* clientHello, word32 helloSz, byte type,
-                                                     byte* sni, word32* inOutSz)
+int CyaSSL_SNI_GetFromBuffer(
+                 const unsigned char* clientHello, unsigned int helloSz,
+                 unsigned char type, unsigned char* sni, unsigned int* inOutSz)
 {
     if (clientHello && helloSz > 0 && sni && inOutSz && *inOutSz > 0)
         return TLSX_SNI_GetFromBuffer(clientHello, helloSz, type, sni, inOutSz);
@@ -625,7 +626,7 @@ int CyaSSL_CTX_UseTruncatedHMAC(CYASSL_CTX* ctx)
 #ifdef HAVE_SUPPORTED_CURVES
 #ifndef NO_CYASSL_CLIENT
 
-int CyaSSL_UseSupportedCurve(CYASSL* ssl, word16 name)
+int CyaSSL_UseSupportedCurve(CYASSL* ssl, unsigned short name)
 {
     if (ssl == NULL)
         return BAD_FUNC_ARG;
@@ -646,7 +647,7 @@ int CyaSSL_UseSupportedCurve(CYASSL* ssl, word16 name)
     return TLSX_UseSupportedCurve(&ssl->extensions, name);
 }
 
-int CyaSSL_CTX_UseSupportedCurve(CYASSL_CTX* ctx, word16 name)
+int CyaSSL_CTX_UseSupportedCurve(CYASSL_CTX* ctx, unsigned short name)
 {
     if (ctx == NULL)
         return BAD_FUNC_ARG;
@@ -1360,8 +1361,10 @@ int CyaSSL_SetVersion(CYASSL* ssl, int version)
 /* Make a work from the front of random hash */
 static INLINE word32 MakeWordFromHash(const byte* hashID)
 {
-    return (hashID[0] << 24) | (hashID[1] << 16) | (hashID[2] <<  8) |
-            hashID[3];
+  return ((word32) hashID[0] << 24) |
+    ((word32) hashID[1] << 16) |
+    ((word32) hashID[2] <<  8) |
+    (word32) hashID[3];
 }
 
 #endif /* !NO_CERTS || !NO_SESSION_CACHE */
@@ -6250,6 +6253,8 @@ int CyaSSL_set_compression(CYASSL* ssl)
 #elif defined(CYASSL_MDK_ARM)
     #define CloseSocket(s) closesocket(s)
     extern int closesocket(int) ;
+#elif defined(NOS)
+#define CloseSocket(s)
 #else
     #define CloseSocket(s) close(s)
 #endif
@@ -7055,8 +7060,8 @@ int CyaSSL_set_compression(CYASSL* ssl)
 
 
     /* SSL_SUCCESS on ok */
-    int CyaSSL_EVP_Cipher(CYASSL_EVP_CIPHER_CTX* ctx, byte* dst, byte* src,
-                          word32 len)
+    int CyaSSL_EVP_Cipher(CYASSL_EVP_CIPHER_CTX* ctx, unsigned char* dst, unsigned char* src,
+                          unsigned int len)
     {
         int ret = 0;
         CYASSL_ENTER("CyaSSL_EVP_Cipher");
@@ -7684,7 +7689,7 @@ int CyaSSL_set_compression(CYASSL* ssl)
     }
 
 
-    word32 CyaSSL_X509_get_pathLength(CYASSL_X509* x509)
+    unsigned int CyaSSL_X509_get_pathLength(CYASSL_X509* x509)
     {
         word32 pathLength = 0;
 

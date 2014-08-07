@@ -521,7 +521,7 @@ int CyaSSL_GetHmacType(CYASSL* ssl)
 }
 
 
-int CyaSSL_SetTlsHmacInner(CYASSL* ssl, byte* inner, word32 sz, int content,
+int CyaSSL_SetTlsHmacInner(CYASSL* ssl, unsigned char* inner, unsigned int sz, int content,
                            int verify)
 {
     if (ssl == NULL || inner == NULL)
