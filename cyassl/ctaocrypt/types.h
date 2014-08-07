@@ -176,7 +176,7 @@ enum {
     #define XREALLOC(p, n, h, t) realloc((p), (n))
 #elif !defined(MICRIUM_MALLOC) && !defined(EBSNET) \
         && !defined(CYASSL_SAFERTOS) && !defined(FREESCALE_MQX) \
-        && !defined(CYASSL_LEANPSK)
+        && !defined(CYASSL_LEANPSK) && !defined(NOS)
     /* default C runtime, can install different routines at runtime via cbs */
     #include <cyassl/ctaocrypt/memory.h>
     #define XMALLOC(s, h, t)     ((void)h, (void)t, CyaSSL_Malloc((s)))
