@@ -88,7 +88,7 @@ extern "C" {
    typedef unsigned short     mp_word;
 #elif defined(MP_16BIT) || defined(NO_64BIT)
    typedef unsigned short     mp_digit;
-   typedef unsigned int       mp_word;
+   typedef unsigned long      mp_word;
 #elif defined(MP_64BIT)
    /* for GCC only on supported platforms */
    typedef unsigned long long mp_digit;  /* 64 bit type, 128 uses mode(TI) */
